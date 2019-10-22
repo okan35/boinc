@@ -1184,7 +1184,7 @@ public class Monitor extends Service {
                     return -999;
                 } else if (acctMgr.error_num == 0 && !acctMgr.messages.toString().equals("")) {
                     return -998;
-                } else if (!acctMgr.messages.toString().equals("") && acctMgr.error_num === -1){
+                } else if (!acctMgr.messages.toString().equals("") && acctMgr.error_num == -1){
                     return -997;
                 } else if (acctMgr.error_num ==0 && acctMgr.messages.toString().equals("")){
                     return acctMgr.error_num;
