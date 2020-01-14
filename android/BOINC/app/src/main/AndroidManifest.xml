@@ -17,8 +17,9 @@
   along with BOINC.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="edu.berkeley.boinc"
-          android:installLocation="internalOnly"> <!-- installation on SD card would break boot receiver -->
+        xmlns:tools="http://schemas.android.com/tools"
+        package="edu.berkeley.boinc"
+        android:installLocation="internalOnly"> <!-- installation on SD card would break boot receiver -->
 
     <!-- Add Google Play store metadata informing the store we can run on tablets and other large screen devices -->
     <supports-screens
@@ -35,6 +36,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+
 
     <!-- Features required for Android TV, consoles, and set-top boxes like Nexus Player, OUYA,
          Razer Forge TV, Nvidia SHIELD, etc -->

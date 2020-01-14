@@ -19,17 +19,27 @@
 
 package edu.berkeley.boinc.attach;
 
+import android.Manifest;
+import android.app.ActivityManager;
+import android.app.AppOpsManager;
 import android.app.Service;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Process;
 import android.os.RemoteException;
+import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -46,6 +56,8 @@ import edu.berkeley.boinc.utils.Logging;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 public class SelectionListActivity extends FragmentActivity {
 
@@ -72,6 +84,59 @@ public class SelectionListActivity extends FragmentActivity {
         // setup layout
         setContentView(R.layout.attach_project_list_layout);
         lv = findViewById(R.id.listview);
+
+        boolean granted = false;
+
+        AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+        int mode = 0;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mode =appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, Process.myUid(), getPackageName());
+            if (mode == AppOpsManager.MODE_DEFAULT) {
+                granted = (checkCallingOrSelfPermission(Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED);
+            } else {
+                granted = (mode == AppOpsManager.MODE_ALLOWED);
+            }
+
+            if(!granted) {
+                startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                getProcesses();
+            } else {
+                getProcesses();
+            }
+        }
+
+    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void getProcesses(){
+        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1)  {
+            UsageStatsManager usageStatsManager = (UsageStatsManager) this.getSystemService(Context.USAGE_STATS_SERVICE);
+            long milliSecs = 60 * 1000;
+            Date date = new Date();
+            List<UsageStats> queryUsageStats = null;
+
+            //IF API LEVEL IS 28 WE WILL GET THE MOST RECENT USAGE DATA
+            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, date.getTime() - milliSecs, date.getTime());
+                System.out.println("1");
+            } else {
+                System.out.println("2");
+                queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, date.getTime() - milliSecs, date.getTime());
+            }
+
+            System.out.println("usage size " + queryUsageStats.size());
+            if(queryUsageStats.contains("com.skype.raider")){
+                System.out.println("FOUND com.skype.raider");
+            }
+            for (int i = 0; i < queryUsageStats.size(); i++){
+                UsageStats stats = queryUsageStats.get(i);
+                if(stats.getPackageName().equals("com.skype.raider")) {
+                    System.out.println("FOUND com.skype.raider");
+                }
+            }
+        }
+
+
     }
 
     @Override
