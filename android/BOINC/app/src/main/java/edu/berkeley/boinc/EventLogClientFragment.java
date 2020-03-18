@@ -13,7 +13,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received eventLogActivity copy of the GNU Lesser General Public License
  * along with BOINC.  If not, see <http://www.gnu.org/licenses/>.
  */
 package edu.berkeley.boinc;
@@ -39,19 +39,19 @@ import android.widget.AbsListView.OnScrollListener;
 public class EventLogClientFragment extends Fragment {
 
     // message retrieval
-    private Integer pastMsgsLoadingRange = 50; // amount messages loaded when end of list is reached
-    private EventLogActivity a;
+    private int pastMsgsLoadingRange = 50; // amount messages loaded when end of list is reached
+    private EventLogActivity eventLogActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        a = ((EventLogActivity) getActivity());
+        eventLogActivity = ((EventLogActivity) getActivity());
 
         View layout = inflater.inflate(R.layout.eventlog_client_layout, container, false);
 
-        a.clientLogList = layout.findViewById(R.id.clientLogList);
-        a.clientLogListAdapter =
-                new ClientLogListAdapter(getActivity(), a.clientLogList, R.id.clientLogList, a.clientLogData);
-        a.clientLogList.setOnScrollListener(new EndlessScrollListener(5));
+        eventLogActivity.clientLogList = layout.findViewById(R.id.clientLogList);
+        eventLogActivity.clientLogListAdapter =
+                new ClientLogListAdapter(getActivity(), eventLogActivity.clientLogList, R.id.clientLogList, eventLogActivity.clientLogData);
+        eventLogActivity.clientLogList.setOnScrollListener(new EndlessScrollListener(5));
 
         return layout;
     }
@@ -69,7 +69,7 @@ public class EventLogClientFragment extends Fragment {
         // Append old messages to the event log
         try {
             for(int x = tmpA.size() - 1; x >= 0; x--) {
-                a.clientLogData.add(tmpA.get(x));
+                eventLogActivity.clientLogData.add(tmpA.get(x));
             }
         }
         catch(Exception e) {
@@ -78,7 +78,7 @@ public class EventLogClientFragment extends Fragment {
             }
         } //IndexOutOfBoundException
 
-        a.clientLogListAdapter.notifyDataSetChanged();
+        eventLogActivity.clientLogListAdapter.notifyDataSetChanged();
     }
 
     // updates data list with most recent messages
@@ -87,7 +87,7 @@ public class EventLogClientFragment extends Fragment {
         try {
             int y = 0;
             for(int x = tmpA.size() - 1; x >= 0; x--) {
-                a.clientLogData.add(y, tmpA.get(x));
+                eventLogActivity.clientLogData.add(y, tmpA.get(x));
                 y++;
             }
         }
@@ -96,7 +96,7 @@ public class EventLogClientFragment extends Fragment {
                 Log.e(Logging.TAG, "EventLogClientFragment.loadRecentMsgs error: ", e);
             }
         } //IndexOutOfBoundException
-        a.clientLogListAdapter.notifyDataSetChanged();
+        eventLogActivity.clientLogListAdapter.notifyDataSetChanged();
     }
 
     // onScrollListener for list view, implementing "endless scrolling"
@@ -135,8 +135,8 @@ public class EventLogClientFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            if(!a.clientLogData.isEmpty()) {
-                mostRecentSeqNo = a.clientLogData.get(0).seqno;
+            if(!eventLogActivity.clientLogData.isEmpty()) {
+                mostRecentSeqNo = eventLogActivity.clientLogData.get(0).seqno;
             }
         }
 
@@ -167,8 +167,8 @@ public class EventLogClientFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            if(!a.clientLogData.isEmpty()) {
-                pastSeqNo = a.clientLogData.get(a.clientLogData.size() - 1).seqno;
+            if(!eventLogActivity.clientLogData.isEmpty()) {
+                pastSeqNo = eventLogActivity.clientLogData.get(eventLogActivity.clientLogData.size() - 1).seqno;
                 if(pastSeqNo == 0) {
                     if(Logging.DEBUG) {
                         Log.d("RetrievePastMsgs", "cancel, oldest messages already loaded");

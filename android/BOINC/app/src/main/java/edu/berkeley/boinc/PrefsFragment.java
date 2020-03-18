@@ -185,9 +185,9 @@ public class PrefsFragment extends Fragment {
 
         data.clear();
 
-        Boolean advanced = BOINCActivity.monitor.getShowAdvanced();
-        Boolean stationaryDeviceMode = BOINCActivity.monitor.getStationaryDeviceMode();
-        Boolean stationaryDeviceSuspected = BOINCActivity.monitor.isStationaryDeviceSuspected();
+        boolean advanced = BOINCActivity.monitor.getShowAdvanced();
+        boolean stationaryDeviceMode = BOINCActivity.monitor.getStationaryDeviceMode();
+        boolean stationaryDeviceSuspected = BOINCActivity.monitor.isStationaryDeviceSuspected();
 
         // The order is important, the GUI will be displayed in the same order as the data is added.
         // General
@@ -638,7 +638,7 @@ public class PrefsFragment extends Fragment {
 
     public Double parseInputValueToDouble(String input) {
         // Parse value
-        Double value;
+        double value;
         try {
             input = input.replaceAll(",", "."); //Replace e.g. European decimal seperator "," by "."
             value = Double.parseDouble(input);
@@ -682,9 +682,9 @@ public class PrefsFragment extends Fragment {
             if(Logging.DEBUG) {
                 Log.d(Logging.TAG, "onCbClick");
             }
-            Boolean previousState = cb.isChecked();
+            boolean previousState = cb.isChecked();
             cb.setChecked(!previousState);
-            Boolean isSet = cb.isChecked();
+            boolean isSet = cb.isChecked();
             try {
                 switch(ID) {
                     case R.string.prefs_autostart_header: //app pref
@@ -881,8 +881,8 @@ public class PrefsFragment extends Fragment {
     public class SelectionDialogOption {
         public String name;
         public Integer ID = null;
-        public Boolean selected = false;
-        public Boolean highlighted = false;
+        public boolean selected = false;
+        public boolean highlighted = false;
 
         public SelectionDialogOption(String name) {
             this.name = name;

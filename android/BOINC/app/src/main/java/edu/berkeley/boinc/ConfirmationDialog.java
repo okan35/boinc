@@ -39,7 +39,7 @@ public class ConfirmationDialog extends android.support.v4.app.DialogFragment {
                 .create();
     }
 
-    public void setConfirmationClicklistener(OnClickListener cl) {
+    /*public void setConfirmationClicklistener(OnClickListener cl) {
         mConfirmClickListener = cl;
     }
 
@@ -47,5 +47,5 @@ public class ConfirmationDialog extends android.support.v4.app.DialogFragment {
         void onDialogRead();
 
         void onDialogChecked(boolean isChecked);
-    }
+    }*/
 }

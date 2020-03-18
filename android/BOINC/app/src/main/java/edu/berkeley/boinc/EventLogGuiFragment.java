@@ -13,7 +13,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received eventLogActivity copy of the GNU Lesser General Public License
  * along with BOINC.  If not, see <http://www.gnu.org/licenses/>.
  */
 package edu.berkeley.boinc;
@@ -34,17 +34,17 @@ import android.widget.ArrayAdapter;
 
 public class EventLogGuiFragment extends Fragment {
 
-    private EventLogActivity a;
+    private EventLogActivity eventLogActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        a = ((EventLogActivity) getActivity());
+        eventLogActivity = ((EventLogActivity) getActivity());
 
         View layout = inflater.inflate(R.layout.eventlog_gui_layout, container, false);
 
-        a.guiLogList = layout.findViewById(R.id.guiLogList);
-        a.guiLogListAdapter = new ArrayAdapter<>(getActivity(), R.layout.eventlog_gui_listitem_layout, a.guiLogData);
-        a.guiLogList.setAdapter(a.guiLogListAdapter);
+        eventLogActivity.guiLogList = layout.findViewById(R.id.guiLogList);
+        eventLogActivity.guiLogListAdapter = new ArrayAdapter<>(getActivity(), R.layout.eventlog_gui_listitem_layout, eventLogActivity.guiLogData);
+        eventLogActivity.guiLogList.setAdapter(eventLogActivity.guiLogListAdapter);
 
         // read messages
         readLogcat();
@@ -62,7 +62,7 @@ public class EventLogGuiFragment extends Fragment {
 
     private void readLogcat() {
         int number = getResources().getInteger(R.integer.eventlog_gui_messages);
-        a.guiLogData.clear();
+        eventLogActivity.guiLogData.clear();
         try {
             String logLevelFilter = Logging.TAG;
             switch(Logging.LOGLEVEL) {
@@ -94,14 +94,14 @@ public class EventLogGuiFragment extends Fragment {
             int x = 0;
             while((line = BOINCUtils.readLineLimit(bufferedReader, 4096)) != null) {
                 if(x > 1) {
-                    a.guiLogData.add(0, line); // cut off first two lines, prepend to array (most current on top)
+                    eventLogActivity.guiLogData.add(0, line); // cut off first two lines, prepend to array (most current on top)
                 }
                 x++;
             }
             if(Logging.VERBOSE) {
-                Log.v(Logging.TAG, "readLogcat read " + a.guiLogData.size() + " lines.");
+                Log.v(Logging.TAG, "readLogcat read " + eventLogActivity.guiLogData.size() + " lines.");
             }
-            a.guiLogListAdapter.notifyDataSetChanged();
+            eventLogActivity.guiLogListAdapter.notifyDataSetChanged();
         }
         catch(IOException e) {
             if(Logging.WARNING) {
