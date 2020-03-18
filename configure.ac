@@ -6,7 +6,7 @@ dnl not sure exactly what the minimum version is (but 2.13 wont work)
 AC_PREREQ(2.58)
 
 dnl Set the BOINC version here.  You can also use the set-version script.
-AC_INIT(BOINC, 7.15.0)
+AC_INIT(BOINC, 7.17.0)
 AC_CONFIG_MACRO_DIR([m4])
 LIBBOINC_VERSION=`echo ${PACKAGE_VERSION} | sed 's/\./:/g'`
 AC_SUBST([LIBBOINC_VERSION])
@@ -409,7 +409,7 @@ if test "${enable_server}" = yes; then
    if test "${no_mysql}" = yes; then
       AC_MSG_ERROR([
 ================================================================================
-ERROR: trying to build BOINC-server, but MYSQL was not be found.
+ERROR: trying to build BOINC-server, but MYSQL was not found.
 
 If you do not want to build the server you should use --disable-server.
 
